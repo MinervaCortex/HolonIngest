@@ -45,7 +45,8 @@ If the payload layout is unknown, HolonIngest sends it to the Dead Letter Queue 
 Add a JSONata rule to the registry for that hash, and you're live. No restarts required.
 ---
 📊 Architecture & Benchmarks
-```flowchart TD
+```mermaid
+flowchart TD;
     subgraph Ingestion["1. Ingestion Layer"]
         A["Unpredictable Sources<br/>(REST, SOAP, CSV, XML)"] --> B["Normalizer Gateway"]
     end
@@ -65,8 +66,8 @@ Add a JSONata rule to the registry for that hash, and you're live. No restarts r
         G --> H3["Holon Clusters<br/><i>(DuckDB Sub-trees)</i>"]
     end
 
-    style DLQ fill:#f8d7da,stroke:#842029,stroke-width:1px
-    style H3 fill:#d1e7dd,stroke:#0f5132,stroke-width:2px
+    style DLQ fill:#f8d7da,stroke:#842029,stroke-width:1.5px,color: black
+    style H3 fill:#d1e7dd,stroke:#0f5132,stroke-width:2px, color: black
 ```
 Latency: < 8ms per request (FastAPI + Pydantic V2 Rust Core)
 Memory: Zero-copy transfer to Polars / DuckDB / Kuzu Graph DB via PyArrow
