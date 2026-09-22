@@ -1,12 +1,17 @@
 🔷 HolonIngest
-> \*\*Zero-Code Dynamic Ingestion Engine for Holonic Knowledge Graphs.\*\*  
-> Convert any heterogeneous payload (XML, CSV, JSON, Webhooks) into zero-copy PyArrow graph structures using structural fingerprinting and JSONata.
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com)
-[![PyArrow](https://img.shields.io/badge/PyArrow-Enabled-orange.svg)](https://arrow.apache.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center"><font color="red"><b>Zero-Code Dynamic Ingestion Engine for Holonic Knowledge Graphs.</b></font> </p> 
+<p align="center"><font color="red">Convert any heterogeneous payload (XML, CSV, JSON, Webhooks) into zero-copy PyArrow graph structures using structural fingerprinting and JSONata.</font></p>
+</p>
+
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python 3.11+"></a>
+  <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.100+-009688.svg" alt="FastAPI"></a>
+  <a href="https://arrow.apache.org/"><img src="https://img.shields.io/badge/PyArrow-Enabled-orange.svg" alt="PyArrow"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>   
 ---
+
 🚨 **The Problem**
 
 Traditional ETL pipelines break when new API sources change their JSON schemas or send raw XML/CSV. Re-deploying parsers for every new IoT sensor, contract format, or HR system creates engineering debt and bloats your graph database with duplicate nodes.
@@ -37,7 +42,7 @@ curl -X POST "http://localhost:8000/api/v1/ingest" \\
 If the payload layout is unknown, HolonIngest sends it to the Dead Letter Queue (DLQ) with its structural hash:
 ```json
 {
-  "status": "DLQ\_UNRECOGNIZED\_SCHEMA",
+-  "status": "UNRECOGNIZED SCHEMA",
   "fingerprint": "a1b2c3d4e5..."
 }
 
@@ -63,11 +68,15 @@ flowchart TD;
         F --> G["PyArrow Engine"]
         G --> H1[("Nodes Table")]
         G --> H2[("Edges Table")]
+     end
+
+     subgraph GraphOutput["4. Holonification"]
         G --> H3["Holon Clusters<br/><i>(DuckDB Sub-trees)</i>"]
-    end
+     end
+    
 
     style DLQ fill:#f8d7da,stroke:#842029,stroke-width:1.5px,color: black
-    style H3 fill:#d1e7dd,stroke:#0f5132,stroke-width:2px, color: black
+    style H3 fill:#d1e7dd,stroke:#0f5132,stroke-width:2px,color: black
 ```
 Latency: < 8ms per request (FastAPI + Pydantic V2 Rust Core)
 Memory: Zero-copy transfer to Polars / DuckDB / Kuzu Graph DB via PyArrow
