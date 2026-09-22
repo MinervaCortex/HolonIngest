@@ -45,11 +45,10 @@ If the payload layout is unknown, HolonIngest sends it to the Dead Letter Queue 
 Add a JSONata rule to the registry for that hash, and you're live. No restarts required.
 ---
 📊 Architecture & Benchmarks
-```
+```mermaid
 \[ Unpredictable Sources ] ➔ \[ Normalizer ] ➔ \[ Fingerprinter ] ➔ \[ JSONata ] ➔ \[ PyArrow Holon Clusters ]
 
 ```
 Latency: < 8ms per request (FastAPI + Pydantic V2 Rust Core)
 Memory: Zero-copy transfer to Polars / DuckDB / Kuzu Graph DB via PyArrow
 ```
-
