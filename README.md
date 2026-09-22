@@ -45,8 +45,7 @@ If the payload layout is unknown, HolonIngest sends it to the Dead Letter Queue 
 Add a JSONata rule to the registry for that hash, and you're live. No restarts required.
 ---
 📊 Architecture & Benchmarks
-```
-flowchart TD
+```flowchart TD
     subgraph Ingestion["1. Ingestion Layer"]
         A["Unpredictable Sources<br/>(REST, SOAP, CSV, XML)"] --> B["Normalizer Gateway"]
     end
