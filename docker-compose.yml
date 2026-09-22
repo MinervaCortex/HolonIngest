@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # 1. Engine HolonIngest (Microservizio Python)
+  holoningest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: holoningest_app
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_DLQ_BUCKET=holoningest-dlq
+    depends_on:
+      redis:
+        condition: service_healthy
+      init-minio:
+        condition: service_completed_successfully
+
+  # 2. Redis Stream / Ingest Cache (Fingerprint Registry & Queues)
+  redis:
+    image: redis:7-alpine
+    container_name: holoningest_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # 3. MinIO Object Storage (Persistenza DLQ per payload non riconosciuti)
+  minio:
+    image: minio/minio:latest
+    container_name: holoningest_minio
+    ports:
+      - "9000:9000"  # S3 API
+      - "9001:9001"  # Console Web MinIO
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # 4. Container Epimero per Inizializzazione Bucket DLQ
+  init-minio:
+    image: minio/mc:latest
+    container_name: holoningest_minio_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb --ignore-existing myminio/holoningest-dlq;
+      exit 0;
+      "
+
+volumes:
+  minio_data:
