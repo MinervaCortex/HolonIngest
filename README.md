@@ -28,7 +28,7 @@ Traditional ETL pipelines break when new API sources change their JSON schemas o
 
 🚀 **Quickstart (30 Seconds)**
 ```bash
-pip install holoningest
+pip install git+https://github.com/your-username/holoningest.git
 holoningest-server --port 8000
 
 ```
