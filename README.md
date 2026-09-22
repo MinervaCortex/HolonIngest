@@ -45,9 +45,29 @@ If the payload layout is unknown, HolonIngest sends it to the Dead Letter Queue 
 Add a JSONata rule to the registry for that hash, and you're live. No restarts required.
 ---
 📊 Architecture & Benchmarks
-```mermaid
-\[ Unpredictable Sources ] ➔ \[ Normalizer ] ➔ \[ Fingerprinter ] ➔ \[ JSONata ] ➔ \[ PyArrow Holon Clusters ]
+```
+flowchart TD
+    subgraph Ingestion["1. Ingestion Layer"]
+        A["Unpredictable Sources<br/>(REST, SOAP, CSV, XML)"] --> B["Normalizer Gateway"]
+    end
 
+    subgraph CoreEngine["2. Processing & Mapping"]
+        B --> C["Structural Fingerprinter"]
+        C --> D{"Schema Found<br/>in Registry?"}
+        D -- Yes --> E["JSONata Transformer"]
+        D -- No --> DLQ["⚠️ Dead Letter Queue (DLQ)<br/><i>Store raw payload & hash</i>"]
+    end
+
+    subgraph GraphOutput["3. Graph Export"]
+        E --> F["Pydantic V2 Validation"]
+        F --> G["PyArrow Engine"]
+        G --> H1[("Nodes Table")]
+        G --> H2[("Edges Table")]
+        G --> H3["Holon Clusters<br/><i>(DuckDB Sub-trees)</i>"]
+    end
+
+    style DLQ fill:#f8d7da,stroke:#842029,stroke-width:1px
+    style H3 fill:#d1e7dd,stroke:#0f5132,stroke-width:2px
 ```
 Latency: < 8ms per request (FastAPI + Pydantic V2 Rust Core)
 Memory: Zero-copy transfer to Polars / DuckDB / Kuzu Graph DB via PyArrow
