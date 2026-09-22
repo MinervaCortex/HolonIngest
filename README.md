@@ -1,4 +1,4 @@
-🔷 HolonIngest
+## <p align="center">🔷 HolonIngest </p>
 
 <p align="center"><font color="red"><b>Zero-Code Dynamic Ingestion Engine for Holonic Knowledge Graphs.</b></font> </p> 
 <p align="center"><font color="red">Convert any heterogeneous payload (XML, CSV, JSON, Webhooks) into zero-copy PyArrow graph structures using structural fingerprinting and JSONata.</font></p>
@@ -52,29 +52,55 @@ Add a JSONata rule to the registry for that hash, and you're live. No restarts r
 📊 Architecture & Benchmarks
 ```mermaid
 flowchart TD;
-    subgraph Ingestion["1. Ingestion Layer"]
+    subgraph Ingestion[" "]
+        direction TB
+        T1["<b>1. Ingestion Layer</b>"]
         A["Unpredictable Sources<br/>(REST, SOAP, CSV, XML)"] --> B["Normalizer Gateway"]
+        
+        %% Force T1 to be above A
+        T1 ~~~ A
     end
 
-    subgraph CoreEngine["2. Processing & Mapping"]
+    subgraph CoreEngine[" "]
+        direction TB
+        T2["<b>2. Processing & Mapping</b>"]
         B --> C["Structural Fingerprinter"]
         C --> D{"Schema Found<br/>in Registry?"}
         D -- Yes --> E["JSONata Transformer"]
         D -- No --> DLQ["⚠️ Dead Letter Queue (DLQ)<br/><i>Store raw payload & hash</i>"]
+        
+        %% Force T2 to be above C
+        T2 ~~~ C
     end
 
-    subgraph GraphOutput["3. Graph Export"]
+    subgraph GraphOutput[" "]
+        direction TB
+        T3["<b>3. Graph Export</b>"]
         E --> F["Pydantic V2 Validation"]
         F --> G["PyArrow Engine"]
         G --> H1[("Nodes Table")]
         G --> H2[("Edges Table")]
-     end
+        
+        %% Force T3 to be above F
+        T3 ~~~ F
+    end
 
-     subgraph GraphOutput["4. Holonification"]
+    subgraph End[" "]
+        direction TB
+        T4["<b>4. Holonification</b>"]
         G --> H3["Holon Clusters<br/><i>(DuckDB Sub-trees)</i>"]
-     end
-    
+        
+        %% Force T4 to be above H3
+        T4 ~~~ H3
+    end
 
+    %% Hide borders and backgrounds for title nodes
+    style T1 fill:none,stroke:none
+    style T2 fill:none,stroke:none
+    style T3 fill:none,stroke:none
+    style T4 fill:none,stroke:none
+
+    %% Custom node styles
     style DLQ fill:#f8d7da,stroke:#842029,stroke-width:1.5px,color: black
     style H3 fill:#d1e7dd,stroke:#0f5132,stroke-width:2px,color: black
 ```
