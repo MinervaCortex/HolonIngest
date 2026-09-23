@@ -43,7 +43,7 @@ curl -X POST "http://localhost:8000/api/v1/ingest" \\
 If the payload layout is unknown, HolonIngest sends it to the Dead Letter Queue (DLQ) with its structural hash:
 ```json
 {
--  "status": "UNRECOGNIZED SCHEMA",
+  "status": "DLQ: UNRECOGNIZED SCHEMA",
   "fingerprint": "a1b2c3d4e5..."
 }
 
