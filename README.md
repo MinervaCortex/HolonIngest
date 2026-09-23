@@ -9,7 +9,8 @@
   <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.100+-009688.svg" alt="FastAPI"></a>
   <a href="https://arrow.apache.org/"><img src="https://img.shields.io/badge/PyArrow-Enabled-orange.svg" alt="PyArrow"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-</p>   
+</p> 
+
 ---
 
 🚨 **The Problem**
