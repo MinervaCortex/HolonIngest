@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python 3.11+"></a>
   <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.100+-009688.svg" alt="FastAPI"></a>
-  <a href="https://arrow.apache.org/"><img src="https://img.shields.io/badge/PyArrow-Enabled-orange.svg" alt="PyArrow"></a>
+  <a href="https://arrow.apache.org/"><img src="https://img.shields.io/badge/PyArrow-Enabled-green.svg" alt="PyArrow"></a>
   <a href="https://opensource.org/licenses/Apache2.0"><img src="https://img.shields.io/badge/License-Apache2.0-yellow.svg" alt="License: Apache2.o"></a>
 </p> 
 
